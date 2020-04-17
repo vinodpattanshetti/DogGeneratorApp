@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 
 public class CacheLRU<K, V> {
@@ -38,6 +39,13 @@ public class CacheLRU<K, V> {
         }
         updateUsed(key);
         cache.put(key, value);
+    }
+
+    public synchronized void putAllValues(ArrayList<V> list) {
+        ArrayList<K> keysList = (ArrayList<K>) new ArrayList<>(list);
+        for (int i = 0; i < list.size(); i++) {
+            put(keysList.get(i), list.get(i));
+        }
     }
 
     private void updateUsed(K key) {

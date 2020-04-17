@@ -2,6 +2,7 @@ package com.example.vinod.doggeneratorapp.base
 
 import android.app.Activity
 import android.app.Application
+import android.content.SharedPreferences
 import com.example.vinod.doggeneratorapp.base.component.ApplicationComponent
 import com.example.vinod.doggeneratorapp.base.component.DaggerApplicationComponent
 import com.example.vinod.doggeneratorapp.base.utils.CacheLRU
@@ -42,6 +43,10 @@ class AppController: Application(), HasActivityInjector {
 
   fun getCache() : CacheLRU<String, String> {
     return cache
+  }
+
+  fun updateCacheToSharedPreferences() {
+    ///var sharedPreferences = SharedPreferences
   }
 
 }
