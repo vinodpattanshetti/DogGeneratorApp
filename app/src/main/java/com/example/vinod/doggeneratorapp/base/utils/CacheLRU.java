@@ -1,25 +1,29 @@
 package com.example.vinod.doggeneratorapp.base.utils;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Set;
 
-public class CacheLRU<K,V> {
+public class CacheLRU<K, V> {
 
     private int maxSize;
     private LinkedHashMap<K, V> cache;
     private ArrayList<K> used;
 
     public CacheLRU(int maxSize) {
+        if (maxSize < 1) {
+            throw new IllegalArgumentException("Max size should be greater than zero");
+        }
         this.maxSize = maxSize;
-        this.cache = new LinkedHashMap<K,V>(maxSize);
-        this.used = new ArrayList<K>(maxSize);
+        //LinkedHashMap is used to maintain insertion order of image urls
+        this.cache = new LinkedHashMap<>(maxSize);
+        this.used = new ArrayList<>(maxSize);
     }
 
     public CacheLRU() {
-        this(10);
+        this(20);
     }
 
     public synchronized V get(K key) {
@@ -27,22 +31,18 @@ public class CacheLRU<K,V> {
         return cache.get(key);
     }
 
-    public synchronized V put(K key, V value) {
-        if (cache.size() >= maxSize && used.size() > 0) {
+    public synchronized void put(K key, V value) {
+        if (cache.size() >= maxSize) {
             cache.remove(used.get(0));
             used.remove(0);
         }
         updateUsed(key);
-        return cache.put(key, value);
+        cache.put(key, value);
     }
 
     private void updateUsed(K key) {
         used.remove(key);
         used.add(key);
-    }
-
-    public ArrayList<String> getImageUrlList() {
-        return (ArrayList<String>) used;
     }
 
     public synchronized int size() {
@@ -63,8 +63,10 @@ public class CacheLRU<K,V> {
         return cache.keySet();
     }
 
-    public Collection<V> values() {
-        return cache.values();
+    public ArrayList<V> values() {
+        ArrayList<V> list = new ArrayList<>(cache.values());
+        Collections.reverse(list);
+        return list;
     }
 
 }

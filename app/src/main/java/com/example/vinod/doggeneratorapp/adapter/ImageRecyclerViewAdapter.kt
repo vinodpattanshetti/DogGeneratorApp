@@ -20,10 +20,12 @@ class ImageRecyclerViewAdapter(private val imageUrlList: ArrayList<String>) : Re
     )
   }
 
-  inner class ImageViewHolder(val binder: ImageviewItemLayoutBinding) :
+  inner class ImageViewHolder(private val binder: ImageviewItemLayoutBinding) :
     RecyclerView.ViewHolder(binder.root) {
     fun bind(position: Int) {
       setImageLoader(binder.ivImageView, imageUrlList[position])
+      val finalPosition = position + 1
+      binder.tvCount.text = "Count : $finalPosition"
     }
   }
 

@@ -1,14 +1,13 @@
 package com.example.vinod.doggeneratorapp.view
 
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
-
 import android.os.Bundle
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vinod.doggeneratorapp.R
 import com.example.vinod.doggeneratorapp.adapter.ImageRecyclerViewAdapter
+import com.example.vinod.doggeneratorapp.adapter.SpacesItemDecoration
 import com.example.vinod.doggeneratorapp.base.BaseActivity
-
 import com.example.vinod.doggeneratorapp.databinding.ActivityRecentlyGeneratedDogsBinding
 import com.example.vinod.doggeneratorapp.view.MainActivity.Companion.IMAGE_URL_LIST_KEY
 
@@ -33,16 +32,18 @@ class RecentlyGeneratedDogsActivity : BaseActivity() {
       initToolbar(tbToolbar, getString(R.string.text_recently_generated_dogs), true)
     }
     val adapter = ImageRecyclerViewAdapter(mImageUrlList)
-    mBinder?.rvList?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-    mBinder?.rvList?.adapter = adapter
-    mBinder?.btClearDogs?.setOnClickListener {
-      adapter.clearImageUrlList()
+    mBinder?.run {
+      mBinder?.rvList?.layoutManager = LinearLayoutManager(
+        this@RecentlyGeneratedDogsActivity, LinearLayoutManager.HORIZONTAL, false
+      )
+      mBinder?.rvList?.adapter = adapter
+      mBinder?.rvList?.addItemDecoration(SpacesItemDecoration(8))
+      btClearDogs?.setOnClickListener {
+        adapter.clearImageUrlList()
+        val intent = Intent()
+        setResult(RESULT_OK, intent)
+      }
     }
   }
 
-  override fun onBackPressed() {
-    val intent = Intent()
-    setResult(RESULT_OK, intent)
-    super.onBackPressed()
-  }
 }
